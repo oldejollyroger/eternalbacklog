@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
-    <!-- Adding a little extra style for the star ratings -->
     <style>
         .star-rating .filled { color: #facc15; } /* a yellow-ish gold color */
     </style>
@@ -15,22 +14,117 @@
 <body class="bg-gray-900 text-white font-sans">
 
     <header class="fixed top-0 left-0 w-full z-30 p-4 bg-black/30 backdrop-blur-sm shadow-md">
-        <!-- ... Full header code from previous version ... -->
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-8">
+                <a href="index.html" class="text-2xl font-bold text-white">Eternal Backlog</a>
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="games.html" class="text-gray-300 hover:text-white transition-colors">Games</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">Guides</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">Sessions</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">Forums</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">Leaderboards</a>
+                </nav>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="dashboard.html" class="hidden sm:block bg-gray-700/50 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg text-sm transition-colors">Dashboard</a>
+                <a href="public_profile.html" class="block w-10 h-10 rounded-full border-2 border-transparent hover:border-purple-500 transition-colors">
+                    <img class="h-full w-full rounded-full object-cover" src="https://placehold.co/100x100/1f2937/ffffff?text=TH" alt="User Avatar">
+                </a>
+                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden container mx-auto mt-4 p-4 bg-gray-800 rounded-lg">
+           <nav class="flex flex-col space-y-4">
+               <a href="games.html" class="text-gray-300 hover:text-white">Games</a>
+               <a href="#" class="text-gray-300 hover:text-white">Guides</a>
+               <a href="#" class="text-gray-300 hover:text-white">Sessions</a>
+               <a href="#" class="text-gray-300 hover:text-white">Forums</a>
+               <a href="#" class="text-gray-300 hover:text-white">Leaderboards</a>
+               <hr class="border-gray-700">
+               <a href="dashboard.html" class="bg-gray-700 text-center text-white font-semibold py-2 px-4 rounded-lg">My Dashboard</a>
+               <a href="public_profile.html" class="bg-purple-600 text-center text-white font-semibold py-2 px-4 rounded-lg">My Profile</a>
+          </nav>
+       </div>
     </header>
 
     <main>
-        <!-- Hero Slideshow (Identical, No Changes) -->
         <section class="relative w-full h-[550px] bg-gray-900">
-            <!-- ... Full hero slideshow code from previous version ... -->
+            <div class="swiper h-full">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="w-full h-full flex items-center justify-center text-center text-white bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1550745165-9bc0b252726a?q=80&w=2070&auto=format&fit=crop');">
+                            <div class="absolute inset-0 bg-black/60"></div>
+                            <div class="relative z-10 p-4 space-y-4">
+                                <h2 class="text-4xl md:text-5xl font-bold">New Guide: Elden Ring 100% Walkthrough</h2>
+                                <p class="text-lg md:text-xl max-w-2xl mx-auto text-gray-300">Our most comprehensive guide yet is now live!</p>
+                                <a href="game_page.html" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg inline-block transition-transform hover:scale-105">Read The Guide</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="w-full h-full flex items-center justify-center text-center text-white bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1616594418341-445657879155?q=80&w=2070&auto=format&fit=crop');">
+                            <div class="absolute inset-0 bg-black/60"></div>
+                            <div class="relative z-10 p-4 space-y-4">
+                                <h2 class="text-4xl md:text-5xl font-bold">Major Publisher Announces New Sci-Fi RPG</h2>
+                                <p class="text-lg md:text-xl max-w-2xl mx-auto text-gray-300">Get the first details on this exciting new title.</p>
+                                <a href="#" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg inline-block transition-transform hover:scale-105">See The News</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
         </section>
 
-        <!-- Latest News Section (Identical, No Changes) -->
         <section class="py-16 md:py-24 bg-gray-950">
-            <!-- ... Full news section code from previous version ... -->
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold">Latest From The Backlog</h2>
+                    <p class="text-lg text-gray-400 mt-4">Independent news, reviews, and features for the thoughtful gamer.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg">
+                        <a href="#">
+                            <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1693420173821-863a568541e2?q=80&w=800&auto=format&fit=crop" alt="Baldur's Gate 3 art" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"></div>
+                            <div class="p-6">
+                                <p class="text-sm font-semibold text-purple-400 mb-2">REVIEW</p>
+                                <h3 class="text-xl font-bold mb-3 leading-snug group-hover:text-purple-400 transition-colors">Baldur's Gate 3 Review: A Generational RPG</h3>
+                                <p class="text-gray-400 text-sm">After 150 hours, we dive into what makes Larian's masterpiece a new benchmark for the industry.</p>
+                            </div>
+                        </a>
+                    </article>
+
+                    <article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg">
+                        <a href="#">
+                            <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1669938805358-26164d1a4d46?q=80&w=800&auto=format&fit=crop" alt="God of War art" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"></div>
+                            <div class="p-6">
+                                <p class="text-sm font-semibold text-cyan-400 mb-2">INDUSTRY NEWS</p>
+                                <h3 class="text-xl font-bold mb-3 leading-snug group-hover:text-cyan-400 transition-colors">PlayStation Studios Announce New IP</h3>
+                                <p class="text-gray-400 text-sm">First details emerge on a new sci-fi title from a beloved Sony first-party developer.</p>
+                            </div>
+                        </a>
+                    </article>
+
+                    <article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg">
+                        <a href="#">
+                            <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1672723930113-7a91a9d86c47?q=80&w=800&auto=format&fit=crop" alt="Elden Ring art" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"></div>
+                            <div class="p-6">
+                                <p class="text-sm font-semibold text-yellow-400 mb-2">FEATURE</p>
+                                <h3 class="text-xl font-bold mb-3 leading-snug group-hover:text-yellow-400 transition-colors">The Completionist's Guide to Elden Ring's DLC</h3>
+                                <p class="text-gray-400 text-sm">Don't miss a single item. Here's our spoiler-free roadmap for 100% completion in the Land of Shadow.</p>
+                            </div>
+                        </a>
+                    </article>
+                </div>
+            </div>
         </section>
-        
-        <!-- START: NEW "FROM THE COMMUNITY" (REVIEWS) SECTION -->
-        <section class="py-16 md:py-24 bg-gray-900">
+         <section class="py-16 md:py-24 bg-gray-900">
             <div class="container mx-auto px-4">
                 <!-- Section Header -->
                 <div class="text-center max-w-3xl mx-auto mb-12">
@@ -111,14 +205,16 @@
                 </div>
             </div>
         </section>
-        <!-- END: "FROM THE COMMUNITY" SECTION -->
-
     </main>
 
-    <!-- Scripts (Identical, No Changes) -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
-        new Swiper('.swiper', { /* ... Swiper init script ... */ });
+        new Swiper('.swiper', {
+            loop: true,
+            autoplay: { delay: 5000, disableOnInteraction: false },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        });
     </script>
     <script src="assets/js/main.js"></script>
 </body>
