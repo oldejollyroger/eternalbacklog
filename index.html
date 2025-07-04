@@ -7,315 +7,52 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
-    <style>
-        .star-rating .filled { color: #facc15; } /* a yellow-ish gold color */
-    </style>
+    <style> .star-rating .filled { color: #facc15; } </style>
 </head>
 <body class="bg-gray-900 text-white font-sans">
 
+    <!-- Header -->
     <header class="fixed top-0 left-0 w-full z-30 p-4 bg-black/30 backdrop-blur-sm shadow-md">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-8">
-                <a href="index.html" class="text-2xl font-bold text-white">Eternal Backlog</a>
-                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
-                    <a href="games.html" class="text-gray-300 hover:text-white transition-colors">Games</a>
-                    <a href="#" class="text-gray-300 hover:text-white transition-colors">Guides</a>
-                    <a href="#" class="text-gray-300 hover:text-white transition-colors">Sessions</a>
-                    <a href="#" class="text-gray-300 hover:text-white transition-colors">Forums</a>
-                    <a href="#" class="text-gray-300 hover:text-white transition-colors">Leaderboards</a>
-                </nav>
-            </div>
-            <div class="flex items-center space-x-4">
-                <a href="dashboard.html" class="hidden sm:block bg-gray-700/50 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg text-sm transition-colors">Dashboard</a>
-                <a href="public_profile.html" class="block w-10 h-10 rounded-full border-2 border-transparent hover:border-purple-500 transition-colors">
-                    <img class="h-full w-full rounded-full object-cover" src="https://placehold.co/100x100/1f2937/ffffff?text=TH" alt="User Avatar">
-                </a>
-                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
+            <div class="flex items-center space-x-8"><a href="index.html" class="text-2xl font-bold text-white">Eternal Backlog</a><nav class="hidden md:flex items-center space-x-6 text-sm font-medium"><a href="games.html" class="text-gray-300 hover:text-white">Games</a><a href="#" class="text-gray-300 hover:text-white">Guides</a><a href="#" class="text-gray-300 hover:text-white">Sessions</a><a href="#" class="text-gray-300 hover:text-white">Forums</a><a href="#" class="text-gray-300 hover:text-white">Leaderboards</a></nav></div>
+            <div class="flex items-center space-x-4"><a href="dashboard.html" class="hidden sm:block bg-gray-700/50 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg text-sm">Dashboard</a><a href="public_profile.html" class="block w-10 h-10 rounded-full border-2 border-transparent hover:border-purple-500"><img class="h-full w-full rounded-full object-cover" src="https://placehold.co/100x100/1f2937/ffffff?text=TH" alt="User Avatar"></a><button id="mobile-menu-button" class="md:hidden text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button></div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden container mx-auto mt-4 p-4 bg-gray-800 rounded-lg">
-           <nav class="flex flex-col space-y-4">
-               <a href="games.html" class="text-gray-300 hover:text-white">Games</a>
-               <a href="#" class="text-gray-300 hover:text-white">Guides</a>
-               <a href="#" class="text-gray-300 hover:text-white">Sessions</a>
-               <a href="#" class="text-gray-300 hover:text-white">Forums</a>
-               <a href="#" class="text-gray-300 hover:text-white">Leaderboards</a>
-               <hr class="border-gray-700">
-               <a href="dashboard.html" class="bg-gray-700 text-center text-white font-semibold py-2 px-4 rounded-lg">My Dashboard</a>
-               <a href="public_profile.html" class="bg-purple-600 text-center text-white font-semibold py-2 px-4 rounded-lg">My Profile</a>
-          </nav>
-       </div>
+        <div id="mobile-menu" class="hidden md:hidden container mx-auto mt-4 p-4 bg-gray-800 rounded-lg"><nav class="flex flex-col space-y-4"><a href="games.html" class="text-gray-300 hover:text-white">Games</a><a href="#" class="text-gray-300 hover:text-white">Guides</a><a href="#" class="text-gray-300 hover:text-white">Sessions</a><a href="#" class="text-gray-300 hover:text-white">Forums</a><a href="#" class="text-gray-300 hover:text-white">Leaderboards</a><hr class="border-gray-700"><a href="dashboard.html" class="bg-gray-700 text-center font-semibold py-2 px-4 rounded-lg">My Dashboard</a><a href="public_profile.html" class="bg-purple-600 text-center font-semibold py-2 px-4 rounded-lg">My Profile</a></nav></div>
     </header>
 
     <main>
-        <section class="relative w-full h-[550px] bg-gray-900">
-            <div class="swiper h-full">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="w-full h-full flex items-center justify-center text-center text-white bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1550745165-9bc0b252726a?q=80&w=2070&auto=format&fit=crop');">
-                            <div class="absolute inset-0 bg-black/60"></div>
-                            <div class="relative z-10 p-4 space-y-4">
-                                <h2 class="text-4xl md:text-5xl font-bold">New Guide: Elden Ring 100% Walkthrough</h2>
-                                <p class="text-lg md:text-xl max-w-2xl mx-auto text-gray-300">Our most comprehensive guide yet is now live!</p>
-                                <a href="game_page.html" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg inline-block transition-transform hover:scale-105">Read The Guide</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="w-full h-full flex items-center justify-center text-center text-white bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1616594418341-445657879155?q=80&w=2070&auto=format&fit=crop');">
-                            <div class="absolute inset-0 bg-black/60"></div>
-                            <div class="relative z-10 p-4 space-y-4">
-                                <h2 class="text-4xl md:text-5xl font-bold">Major Publisher Announces New Sci-Fi RPG</h2>
-                                <p class="text-lg md:text-xl max-w-2xl mx-auto text-gray-300">Get the first details on this exciting new title.</p>
-                                <a href="#" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg inline-block transition-transform hover:scale-105">See The News</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-            </div>
-        </section>
+        <!-- Hero Slideshow -->
+        <section class="relative w-full h-[550px] bg-gray-900"><div class="swiper h-full"><div class="swiper-wrapper"><div class="swiper-slide"><div class="w-full h-full flex items-center justify-center text-center text-white bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1550745165-9bc0b252726a?q=80&w=2070&auto=format&fit=crop');"><div class="absolute inset-0 bg-black/60"></div><div class="relative z-10 p-4 space-y-4"><h2 class="text-4xl md:text-5xl font-bold">New Guide: Elden Ring 100% Walkthrough</h2><p class="text-lg md:text-xl max-w-2xl mx-auto text-gray-300">Our most comprehensive guide yet is now live!</p><a href="game_page.html" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg inline-block transition-transform hover:scale-105">Read The Guide</a></div></div></div><div class="swiper-slide"><div class="w-full h-full flex items-center justify-center text-center text-white bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1616594418341-445657879155?q=80&w=2070&auto=format&fit=crop');"><div class="absolute inset-0 bg-black/60"></div><div class="relative z-10 p-4 space-y-4"><h2 class="text-4xl md:text-5xl font-bold">Major Publisher Announces New Sci-Fi RPG</h2><p class="text-lg md:text-xl max-w-2xl mx-auto text-gray-300">Get the first details on this exciting new title.</p><a href="#" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg inline-block transition-transform hover:scale-105">See The News</a></div></div></div></div><div class="swiper-pagination"></div><div class="swiper-button-prev"></div><div class="swiper-button-next"></div></div></section>
+        
+        <!-- START: CORRECTED TWO-COLUMN LAYOUT -->
+        <div class="container mx-auto p-4 md:p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-        <section class="py-16 md:py-24 bg-gray-950">
-            <div class="container mx-auto px-4">
-                <div class="text-center max-w-3xl mx-auto mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold">Latest From The Backlog</h2>
-                    <p class="text-lg text-gray-400 mt-4">Independent news, reviews, and features for the thoughtful gamer.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- MAIN CONTENT (Left Column, 75%) -->
+                <div class="lg:col-span-9 space-y-16">
+                    <!-- Latest News Section -->
+                    <section><div class="max-w-3xl mb-12"><h2 class="text-3xl md:text-4xl font-bold">Latest From The Backlog</h2><p class="text-lg text-gray-400 mt-2">Independent news, reviews, and features.</p></div><div class="grid grid-cols-1 md:grid-cols-2 gap-8"><article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg"><a href="#"><div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1693420173821-863a568541e2?q=80&w=800&auto=format&fit=crop" alt="Baldur's Gate 3 art" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"></div><div class="p-6"><p class="text-sm font-semibold text-purple-400 mb-2">REVIEW</p><h3 class="text-xl font-bold mb-3 leading-snug group-hover:text-purple-400">Baldur's Gate 3 Review: A Generational RPG</h3><p class="text-gray-400 text-sm">After 150 hours, we dive into what makes Larian's masterpiece a new benchmark.</p></div></a></article><article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg"><a href="#"><div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1669938805358-26164d1a4d46?q=80&w=800&auto=format&fit=crop" alt="God of War art" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"></div><div class="p-6"><p class="text-sm font-semibold text-cyan-400 mb-2">INDUSTRY NEWS</p><h3 class="text-xl font-bold mb-3 leading-snug group-hover:text-cyan-400">PlayStation Studios Announce New IP</h3><p class="text-gray-400 text-sm">First details emerge on a new sci-fi title from a beloved first-party developer.</p></div></a></article></div></section>
                     
-                    <article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg">
-                        <a href="#">
-                            <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1693420173821-863a568541e2?q=80&w=800&auto=format&fit=crop" alt="Baldur's Gate 3 art" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"></div>
-                            <div class="p-6">
-                                <p class="text-sm font-semibold text-purple-400 mb-2">REVIEW</p>
-                                <h3 class="text-xl font-bold mb-3 leading-snug group-hover:text-purple-400 transition-colors">Baldur's Gate 3 Review: A Generational RPG</h3>
-                                <p class="text-gray-400 text-sm">After 150 hours, we dive into what makes Larian's masterpiece a new benchmark for the industry.</p>
-                            </div>
-                        </a>
-                    </article>
-
-                    <article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg">
-                        <a href="#">
-                            <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1669938805358-26164d1a4d46?q=80&w=800&auto=format&fit=crop" alt="God of War art" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"></div>
-                            <div class="p-6">
-                                <p class="text-sm font-semibold text-cyan-400 mb-2">INDUSTRY NEWS</p>
-                                <h3 class="text-xl font-bold mb-3 leading-snug group-hover:text-cyan-400 transition-colors">PlayStation Studios Announce New IP</h3>
-                                <p class="text-gray-400 text-sm">First details emerge on a new sci-fi title from a beloved Sony first-party developer.</p>
-                            </div>
-                        </a>
-                    </article>
-
-                    <article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg">
-                        <a href="#">
-                            <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1672723930113-7a91a9d86c47?q=80&w=800&auto=format&fit=crop" alt="Elden Ring art" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"></div>
-                            <div class="p-6">
-                                <p class="text-sm font-semibold text-yellow-400 mb-2">FEATURE</p>
-                                <h3 class="text-xl font-bold mb-3 leading-snug group-hover:text-yellow-400 transition-colors">The Completionist's Guide to Elden Ring's DLC</h3>
-                                <p class="text-gray-400 text-sm">Don't miss a single item. Here's our spoiler-free roadmap for 100% completion in the Land of Shadow.</p>
-                            </div>
-                        </a>
-                    </article>
+                    <!-- From The Community Section -->
+                    <section><div class="max-w-3xl mb-12"><h2 class="text-3xl md:text-4xl font-bold">From The Community</h2><p class="text-lg text-gray-400 mt-2">Honest reviews and hot takes from fellow players.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"><article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full"><div class="flex items-center space-x-4"><img src="https://placehold.co/150x200/2d3748/ffffff?text=Elden+Ring" alt="Elden Ring" class="w-16 h-20 object-cover rounded-md flex-shrink-0"><div><h3 class="font-bold">Elden Ring</h3><p class="text-sm text-gray-400">by <a href="#" class="text-purple-400 hover:underline">TrophyHunter27</a></p></div></div><div class="star-rating text-lg"><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span></div><blockquote class="text-gray-300 italic text-sm border-l-2 border-gray-600 pl-4 flex-grow">"An absolute masterpiece of world design. The sense of discovery is unmatched."</blockquote></article><article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full"><div class="flex items-center space-x-4"><img src="https://placehold.co/150x200/107c10/ffffff?text=Helldivers+2" alt="Helldivers 2" class="w-16 h-20 object-cover rounded-md flex-shrink-0"><div><h3 class="font-bold">Helldivers 2</h3><p class="text-sm text-gray-400">by <a href="#" class="text-purple-400 hover:underline">DemocracyFan</a></p></div></div><div class="star-rating text-lg"><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="text-gray-600">★</span></div><blockquote class="text-gray-300 italic text-sm border-l-2 border-gray-600 pl-4 flex-grow">"The most fun I've had with friends in years. Pure, chaotic, hilarious action."</blockquote></article><article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full"><div class="flex items-center space-x-4"><img src="https://placehold.co/150x200/1b2838/ffffff?text=Stardew" alt="Stardew Valley" class="w-16 h-20 object-cover rounded-md flex-shrink-0"><div><h3 class="font-bold">Stardew Valley</h3><p class="text-sm text-gray-400">by <a href="#" class="text-purple-400 hover:underline">CozyGamer</a></p></div></div><div class="star-rating text-lg"><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span></div><blockquote class="text-gray-300 italic text-sm border-l-2 border-gray-600 pl-4 flex-grow">"Don't let the cute graphics fool you, 100% completion is a massive undertaking."</blockquote></article></div></section>
                 </div>
+
+                <!-- SIDEBAR (Right Column, 25%) -->
+                <aside class="lg:col-span-3">
+                    <div class="sticky top-24 space-y-8">
+                        <div class="bg-gray-800/50 p-6 rounded-lg shadow-lg"><h2 class="text-2xl font-bold mb-4">Welcome Back, TrophyHunter27!</h2><p class="text-gray-300 mb-6">Here's what's new for you:</p><ul class="space-y-4"><li class="flex items-center gap-x-3 text-sm"><span class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-bold">✓</span><div><span class="font-semibold">Elden Ring</span> - Platinum Unlocked!</div></li><li class="flex items-center gap-x-3 text-sm"><span class="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center font-bold">?</span><div>A new guide for <span class="font-semibold">Final Fantasy VII</span> is available.</div></li></ul></div>
+                        <div class="bg-gray-800/50 p-4 rounded-lg"><h3 class="text-xl font-bold mb-4">Live Gaming Sessions</h3><div class="space-y-3"><a href="#" class="flex items-center gap-x-3 hover:bg-gray-700 p-2 rounded-md"><img src="https://placehold.co/150x200/107c10/ffffff?text=Helldivers+2" class="w-12 h-16 object-cover rounded-md"><div class="text-sm"><p class="font-bold">Helldivers 2 - Suicide Mission</p><p class="text-gray-400">Objective: Complete main objective</p><div class="font-semibold text-green-400 mt-1">3/4 Players - JOIN NOW</div></div></a><a href="#" class="flex items-center gap-x-3 hover:bg-gray-700 p-2 rounded-md"><img src="https://placehold.co/150x200/4c1d95/ffffff?text=Destiny" class="w-12 h-16 object-cover rounded-md"><div class="text-sm"><p class="font-bold">Destiny 2 - The Final Shape Raid</p><p class="text-gray-400">Objective: Blind Run - Day 1</p><div class="font-semibold text-yellow-400 mt-1">5/6 Players - ALMOST FULL</div></div></a></div></div>
+                        <div class="bg-gray-800/50 p-4 rounded-lg"><h3 class="text-xl font-bold mb-4">New Releases</h3><div class="space-y-3"><a href="game_page.html" class="flex items-center gap-x-3 hover:bg-gray-700 p-2 rounded-md"><img src="https://placehold.co/150x200/2d3748/ffffff?text=FFVII" class="w-10 h-12 object-cover rounded-md"><div class="text-sm"><p class="font-bold">Final Fantasy VII Rebirth</p><p class="text-gray-400">Released: Feb 29, 2024</p></div></a><a href="game_page.html" class="flex items-center gap-x-3 hover:bg-gray-700 p-2 rounded-md"><img src="https://placehold.co/150x200/1b2838/ffffff?text=Hades+II" class="w-10 h-12 object-cover rounded-md"><div class="text-sm"><p class="font-bold">Hades II</p><p class="text-gray-400">Released: May 6, 2024</p></div></a></div></div>
+                        <div class="bg-gray-800/50 p-4 rounded-lg"><h3 class="text-xl font-bold mb-4">New DLCs</h3><div class="space-y-3"><a href="#" class="flex items-center gap-x-3 hover:bg-gray-700 p-2 rounded-md"><img src="https://placehold.co/150x200/eab308/ffffff?text=Elden+DLC" class="w-10 h-12 object-cover rounded-md"><div class="text-sm"><p class="font-bold">Elden Ring: Shadow of the Erdtree</p><p class="text-gray-400">Released: Jun 21, 2024</p></div></a></div></div>
+                    </div>
+                </aside>
             </div>
-        </section>
-         <section class="py-16 md:py-24 bg-gray-900">
-            <div class="container mx-auto px-4">
-                <!-- Section Header -->
-                <div class="text-center max-w-3xl mx-auto mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold">From The Community</h2>
-                    <p class="text-lg text-gray-400 mt-4">Honest reviews and hot takes from your fellow players.</p>
-                </div>
-                
-                <!-- Reviews Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                    <!-- Review Card 1 -->
-                    <article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full">
-                        <div class="flex items-center space-x-4">
-                            <img src="https://placehold.co/150x200/2d3748/ffffff?text=Elden+Ring" alt="Elden Ring" class="w-16 h-20 object-cover rounded-md flex-shrink-0">
-                            <div>
-                                <h3 class="font-bold">Elden Ring</h3>
-                                <p class="text-sm text-gray-400">by <a href="#" class="text-purple-400 hover:underline">TrophyHunter27</a></p>
-                            </div>
-                        </div>
-                        <div class="star-rating text-lg">
-                            <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span>
-                        </div>
-                        <blockquote class="text-gray-300 italic text-sm border-l-2 border-gray-600 pl-4 flex-grow">
-                            "An absolute masterpiece of world design. The sense of discovery is unmatched, but be warned: the platinum trophy is a true test of will."
-                        </blockquote>
-                    </article>
-                    
-                    <!-- Review Card 2 -->
-                    <article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full">
-                        <div class="flex items-center space-x-4">
-                            <img src="https://placehold.co/150x200/107c10/ffffff?text=Helldivers+2" alt="Helldivers 2" class="w-16 h-20 object-cover rounded-md flex-shrink-0">
-                            <div>
-                                <h3 class="font-bold">Helldivers 2</h3>
-                                <p class="text-sm text-gray-400">by <a href="#" class="text-purple-400 hover:underline">DemocracyFan</a></p>
-                            </div>
-                        </div>
-                        <div class="star-rating text-lg">
-                            <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="text-gray-600">★</span>
-                        </div>
-                        <blockquote class="text-gray-300 italic text-sm border-l-2 border-gray-600 pl-4 flex-grow">
-                            "The most fun I've had with friends in years. Pure, chaotic, hilarious action. The friendly fire is a feature, not a bug!"
-                        </blockquote>
-                    </article>
-                    
-                    <!-- Review Card 3 -->
-                    <article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full">
-                        <div class="flex items-center space-x-4">
-                            <img src="https://placehold.co/150x200/1b2838/ffffff?text=Stardew" alt="Stardew Valley" class="w-16 h-20 object-cover rounded-md flex-shrink-0">
-                            <div>
-                                <h3 class="font-bold">Stardew Valley</h3>
-                                <p class="text-sm text-gray-400">by <a href="#" class="text-purple-400 hover:underline">CozyGamer</a></p>
-                            </div>
-                        </div>
-                        <div class="star-rating text-lg">
-                             <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span>
-                        </div>
-                        <blockquote class="text-gray-300 italic text-sm border-l-2 border-gray-600 pl-4 flex-grow">
-                            "Don't let the cute graphics fool you, getting 100% completion on this is a massive undertaking. Incredibly rewarding."
-                        </blockquote>
-                    </article>
-
-                    <!-- Review Card 4 (No review text) -->
-                    <article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full">
-                        <div class="flex items-center space-x-4">
-                            <img src="https://placehold.co/150x200/4c1d95/ffffff?text=Cyberpunk" alt="Cyberpunk 2077" class="w-16 h-20 object-cover rounded-md flex-shrink-0">
-                            <div>
-                                <h3 class="font-bold">Cyberpunk 2077</h3>
-                                <p class="text-sm text-gray-400">by <a href="#" class="text-purple-400 hover:underline">VeeFlix</a></p>
-                            </div>
-                        </div>
-                        <div class="star-rating text-lg">
-                           <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="text-gray-600">★</span>
-                        </div>
-                        <blockquote class="text-gray-500 italic text-sm border-l-2 border-gray-600 pl-4 flex-grow">
-                            This user gave a rating but did not write a review.
-                        </blockquote>
-                    </article>
-                </div>
-            </div>
-        </section>
-        <div class="container mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8 px-4 py-16">
-            
-                   <div class="container mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-            <!-- MAIN CONTENT (Left Column, ~75%) -->
-            <div class="lg:col-span-9 space-y-16">
-                
-                <!-- Latest News Section -->
-                <section>
-                    <div class="max-w-3xl mb-12">
-                        <h2 class="text-3xl md:text-4xl font-bold">Latest From The Backlog</h2>
-                        <p class="text-lg text-gray-400 mt-2">Independent news, reviews, and features for the thoughtful gamer.</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- News Card 1 -->
-                        <article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg"> ... </article>
-                        <!-- News Card 2 -->
-                        <article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg"> ... </article>
-                        <!-- News Card 3 -->
-                        <article class="bg-gray-800 rounded-lg overflow-hidden group shadow-lg lg:col-span-2"> ... </article>
-                    </div>
-                </section>
-                
-                <!-- From The Community Section -->
-                <section>
-                    <div class="max-w-3xl mb-12">
-                        <h2 class="text-3xl md:text-4xl font-bold">From The Community</h2>
-                        <p class="text-lg text-gray-400 mt-2">Honest reviews and hot takes from your fellow players.</p>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Review Card 1 -->
-                        <article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full"> ... </article>
-                        <!-- Review Card 2 -->
-                        <article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full"> ... </article>
-                        <!-- Review Card 3 -->
-                        <article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full"> ... </article>
-                        <!-- Review Card 4 (hidden on md screens if needed) -->
-                        <article class="bg-gray-800 rounded-lg p-6 flex flex-col space-y-4 shadow-lg h-full hidden lg:flex"> ... </article>
-                    </div>
-                </section>
-
-            </div>
-
-            <!-- SIDEBAR (Right Column, ~25%) -->
-            <aside class="lg:col-span-3">
-                <div class="sticky top-24 space-y-8">
-                    
-                    <!-- Welcome Message Module -->
-                    <div class="bg-gray-800/50 p-6 rounded-lg shadow-lg">
-                        <h2 class="text-2xl font-bold mb-4">Welcome Back!</h2>
-                        <p class="text-gray-300 mb-6">Here's a quick look at what's new for you:</p>
-                        <ul class="space-y-4">
-                            <li class="flex items-center gap-x-3 text-sm"><span class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-bold">✓</span><div><span class="font-semibold">Elden Ring</span> - Platinum Unlocked!</div></li>
-                            <li class="flex items-center gap-x-3 text-sm"><span class="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center font-bold">?</span><div>A new guide for <span class="font-semibold">Final Fantasy VII</span> is available.</div></li>
-                        </ul>
-                    </div>
-
-                    <!-- Live Sessions Module -->
-                    <div class="bg-gray-800/50 p-4 rounded-lg">  <a href="#" class="flex items-center gap-x-3 hover:bg-gray-700 p-2 rounded-md transition-colors">
-                            <img src="https://placehold.co/150x200/107c10/ffffff?text=Helldivers+2" class="w-12 h-16 object-cover rounded-md flex-shrink-0">
-                            <div class="text-sm">
-                                <p class="font-bold">Helldivers 2 - Suicide Mission</p>
-                                <p class="text-gray-400">Objective: Complete main objective</p>
-                                <div class="font-semibold text-green-400 mt-1">3/4 Players - JOIN NOW</div>
-                            </div>
-                        </a>
-                         <!-- Session Item 2 -->
-                        <a href="#" class="flex items-center gap-x-3 hover:bg-gray-700 p-2 rounded-md transition-colors">
-                            <img src="https://placehold.co/150x200/4c1d95/ffffff?text=Destiny" class="w-12 h-16 object-cover rounded-md flex-shrink-0">
-                            <div class="text-sm">
-                                <p class="font-bold">Destiny 2 - The Final Shape Raid</p>
-                                <p class="text-gray-400">Objective: Blind Run - Day 1</p>
-                                <div class="font-semibold text-yellow-400 mt-1">5/6 Players - ALMOST FULL</div>
-                            </div>
-                        </a>
-                     </div>
-
-                    <!-- New Releases Module -->
-                    <div class="bg-gray-800/50 p-4 rounded-lg"> <a href="game_page.html" class="flex items-center gap-x-3 hover:bg-gray-700 p-2 rounded-md transition-colors">
-                            <img src="https://placehold.co/150x200/2d3748/ffffff?text=FFVII" class="w-10 h-12 object-cover rounded-md flex-shrink-0">
-                            <div class="text-sm"><p class="font-bold">Final Fantasy VII Rebirth</p><p class="text-gray-400">Released: Feb 29, 2024</p></div>
-                        </a>
-                       <!-- New Game Item 2 -->
-                        <a href="game_page.html" class="flex items-center gap-x-3 hover:bg-gray-700 p-2 rounded-md transition-colors">
-                            <img src="https://placehold.co/150x200/1b2838/ffffff?text=Hades+II" class="w-10 h-12 object-cover rounded-md flex-shrink-0">
-                            <div class="text-sm"><p class="font-bold">Hades II</p><p class="text-gray-400">Released: May 6, 2024</p></div>
-                        </a>
-                    </div>
-
-                    <!-- New DLCs Module -->
-                    <div class="bg-gray-800/50 p-4 rounded-lg"> 
-                         <a href="#" class="flex items-center gap-x-3 hover:bg-gray-700 p-2 rounded-md transition-colors">
-                            <img src="https://placehold.co/150x200/eab308/ffffff?text=Elden+DLC" class="w-10 h-12 object-cover rounded-md flex-shrink-0">
-                            <div class="text-sm"><p class="font-bold">Elden Ring: Shadow of the Erdtree</p><p class="text-gray-400">Released: Jun 21, 2024</p> </div>
-
-                </div>
-            </aside>
         </div>
-        </div>
-
+        <!-- END: TWO-COLUMN LAYOUT -->
     </main>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script>
-        new Swiper('.swiper', {
-            loop: true,
-            autoplay: { delay: 5000, disableOnInteraction: false },
-            pagination: { el: '.swiper-pagination', clickable: true },
-            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-        });
-    </script>
+    <script>new Swiper('.swiper',{loop:true,autoplay:{delay:5000,disableOnInteraction:false},pagination:{el:'.swiper-pagination',clickable:true},navigation:{nextEl:'.swiper-button-next',prevEl:'.swiper-button-prev'}});</script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>
