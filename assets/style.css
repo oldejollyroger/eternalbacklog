@@ -1,0 +1,28 @@
+/* Custom class for the DLC toggle switch animation */
+input:checked~.dot {
+    transform: translateX(1.5rem);
+    background-color: #a855f7; /* Purple */
+}
+
+/* Custom class for active platform/filter tabs */
+.tab-button.active {
+    color: #fff;
+    border-color: #a855f7; /* Purple */
+}
+
+/* Custom class for active view toggles (grid/list) in the dashboard */
+.view-toggle.active {
+    background-color: #a855f7; /* Purple */
+    color: #fff;
+}
+
+/* Styling for the Swiper slideshow pagination dots */
+.swiper-pagination-bullet-active {
+    background-color: #a855f7 !important; /* Purple */
+}
+
+/* Styling for the Swiper slideshow navigation arrows */
+.swiper-button-next,
+.swiper-button-prev {
+    color: #fff !important;
+}
