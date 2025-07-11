@@ -1,8 +1,8 @@
 (function() {
     // ---- 1. CONFIGURATION & STATE ---- //
     // IMPORTANT: Replace these with the credentials you got from the Twitch Developer Console.
-    const CLIENT_ID = 'YOUR_CLIENT_ID_HERE';
-    const CLIENT_SECRET = 'YOUR_CLIENT_SECRET_HERE';
+    const CLIENT_ID = 'y021ru5dx7dwkfwnff71i0bfehbbx0';
+    const CLIENT_SECRET = 'm9fdk0axx5nqqbsqa7s94ugrncfwmx';
     
     // This is a proxy to bypass browser CORS security issues. It's a free, open-source tool.
     const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/'; 
