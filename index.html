@@ -3,341 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wastd Hours - Player Library</title>
+    <title>Eternal Backlog | Player Hub</title>
     <style>
         :root {
-            --bg-main: #0a0a0c;
-            --bg-surface: #15151a;
-            --bg-card: #1c1c24;
-            --text-main: #f0f0f5;
-            --text-muted: #8f8f9d;
-            --accent: #e50914;
-            --accent-hover: #ff1f2a;
-            --border: #2a2a35;
-            
-            --c-plat: #00d26a;
-            --c-playing: #00a8ff;
-            --c-next: #fbc531;
-            --c-backlog: #7f8fa6;
+            --bg-body: #050505;
+            --bg-surface: #111111;
+            --bg-card: #1a1a1a;
+            --accent: #ff4d4d;
+            --accent-glow: rgba(255, 77, 77, 0.4);
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-main); color: var(--text-main); }
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
 
-        /* Header y Navegación */
-        header { background: var(--bg-surface); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-        .brand { font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; }
-        .brand span { color: var(--accent); }
-        
-        nav { display: flex; gap: 20px; }
-        nav button { background: none; border: none; color: var(--text-muted); font-size: 1rem; font-weight: bold; cursor: pointer; padding: 5px 10px; transition: color 0.2s; }
-        nav button:hover, nav button.active { color: var(--text-main); border-bottom: 2px solid var(--accent); }
+        /* --- NAVEGACIÓN MODERNA --- */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 50px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            position: fixed;
+            top: 0; width: 100%; z-index: 1000;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
 
-        /* Buscador */
-        .search-container { display: flex; gap: 10px; }
-        .search-container input { padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-main); color: white; outline: none; width: 250px; }
-        .search-container button { background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
+        .logo span { color: var(--accent); }
 
-        /* Cuadrícula Principal */
-        main { padding: 30px; }
-        .section-title { margin-top: 0; margin-bottom: 20px; font-size: 1.8rem; text-transform: uppercase; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links button {
+            background: none; border: none; color: var(--text-dim);
+            font-weight: 600; cursor: pointer; transition: 0.3s;
+            font-size: 0.9rem; position: relative;
+        }
+        .nav-links button.active, .nav-links button:hover { color: var(--text-main); }
+        .nav-links button.active::after {
+            content: ''; position: absolute; bottom: -8px; left: 0; width: 100%; height: 2px; background: var(--accent);
+        }
 
-        /* Tarjetas de Juego */
-        .card { background: var(--bg-card); border-radius: 8px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; border: 1px solid var(--border); position: relative; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.5); border-color: #444; }
-        
-        .card-img { width: 100%; height: 300px; object-fit: cover; background: #222; }
-        .card-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .card-info h3 { margin: 0 0 10px 0; font-size: 1.1rem; }
-        
-        /* Indicador de estado en la tarjeta */
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; }
-        .status-platinums { background: var(--c-plat); }
-        .status-playing { background: var(--c-playing); }
-        .status-next { background: var(--c-next); }
-        .status-backlog { background: var(--c-backlog); }
+        .search-box { position: relative; }
+        .search-box input {
+            background: var(--glass); border: 1px solid var(--border);
+            padding: 10px 20px; border-radius: 30px; color: white; outline: none; width: 200px;
+            transition: 0.3s;
+        }
+        .search-box input:focus { width: 300px; border-color: var(--accent); }
 
-        /* Controles para resultados de búsqueda */
-        .add-controls { margin-top: auto; display: flex; flex-direction: column; gap: 5px; }
-        .add-controls select, .add-controls button { width: 100%; padding: 8px; border-radius: 4px; border: none; font-size: 0.85rem; }
-        .add-controls select { background: #333; color: white; outline: none; }
-        .add-controls button { background: #444; color: white; cursor: pointer; font-weight: bold; }
-        .add-controls button:hover { background: var(--accent); }
+        /* --- GRID DE JUEGOS (NETFLIX STYLE) --- */
+        main { padding: 120px 50px 50px; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 30px;
+        }
 
-        /* Modal Detalle / Editor de Ficha */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: var(--bg-surface); width: 100%; max-width: 900px; max-height: 90vh; border-radius: 12px; overflow: hidden; display: flex; border: 1px solid var(--border); position: relative; }
-        .close-modal { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); border: none; color: white; font-size: 1.5rem; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; z-index: 10; }
-        
-        .modal-left { width: 35%; background-size: cover; background-position: center; position: relative; }
-        .modal-right { width: 65%; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
-        
-        .modal-right h2 { margin: 0; font-size: 2rem; }
-        .platforms-list { font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 5px; flex-wrap: wrap; }
-        .platforms-list span { background: #2a2a35; padding: 3px 8px; border-radius: 4px; }
-        
-        .rawg-desc { font-size: 0.9rem; line-height: 1.5; color: #ccc; max-height: 150px; overflow-y: auto; padding-right: 10px; border-left: 2px solid var(--border); padding-left: 10px; }
-        
-        /* Formulario de usuario en el modal */
-        .user-data-form { background: #1c1c24; padding: 20px; border-radius: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; border: 1px solid var(--border); }
-        .form-group { display: flex; flex-direction: column; gap: 5px; }
-        .form-group.full { grid-column: span 2; }
-        .user-data-form label { font-size: 0.85rem; color: var(--text-muted); font-weight: bold; }
-        .user-data-form input, .user-data-form select, .user-data-form textarea { background: #0a0a0c; border: 1px solid #333; color: white; padding: 10px; border-radius: 6px; outline: none; }
-        .user-data-form textarea { resize: vertical; min-height: 60px; }
-        
-        .save-btn { grid-column: span 2; background: var(--c-playing); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: background 0.2s;}
-        .save-btn:hover { background: #0097e6; }
+        .card {
+            position: relative;
+            aspect-ratio: 2/3;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid var(--border);
+        }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-main); }
-        ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+        .card:hover { transform: scale(1.05); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card img { width: 100%; height: 100%; object-fit: cover; }
+        .card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, transparent 60%);
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 15px;
+            opacity: 0.9;
+        }
+        .card-overlay h3 { margin: 0; font-size: 1rem; font-weight: 700; }
+        .card-overlay p { margin: 5px 0 0; font-size: 0.75rem; color: var(--text-dim); }
+
+        /* --- PÁGINA DE DETALLE (FULL OVERLAY) --- */
+        .game-detail-page {
+            position: fixed; inset: 0; background: var(--bg-body); z-index: 2000;
+            display: none; overflow-y: auto;
+        }
+
+        .hero-banner {
+            width: 100%; height: 50vh; background-size: cover; background-position: center;
+            position: relative;
+        }
+
+        .hero-banner::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, var(--bg-body), transparent);
+        }
+
+        .detail-content { padding: 0 50px 50px; margin-top: -150px; position: relative; z-index: 5; }
+        .detail-header { display: flex; gap: 40px; align-items: flex-end; margin-bottom: 40px; }
+        .detail-poster { width: 250px; border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid var(--border); }
+        
+        .detail-info h1 { font-size: 3.5rem; margin: 0; letter-spacing: -2px; }
+        
+        .detail-tabs { display: flex; gap: 40px; border-bottom: 1px solid var(--border); margin-bottom: 30px; }
+        .tab-btn {
+            background: none; border: none; color: var(--text-dim);
+            padding: 15px 0; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 0.8rem;
+        }
+        .tab-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Estilos específicos para la pestaña de trofeos */
+        .trophy-list { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .trophy-item {
+            background: var(--bg-surface); padding: 15px; border-radius: 10px;
+            display: flex; align-items: center; gap: 15px; border: 1px solid var(--border);
+        }
+        .trophy-icon { width: 40px; height: 40px; border-radius: 50%; background: #222; }
+        .trophy-warn { color: #ffa502; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; border: 1px solid #ffa502; padding: 2px 5px; border-radius: 4px; }
+
+        .close-detail {
+            position: fixed; top: 30px; right: 50px; z-index: 3000;
+            background: var(--accent); color: white; border: none; padding: 10px 20px;
+            border-radius: 30px; font-weight: 800; cursor: pointer;
+        }
+
+        .user-notes-section {
+            background: var(--bg-surface); padding: 25px; border-radius: 15px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        
+        textarea {
+            width: 100%; background: var(--bg-body); border: 1px solid var(--border);
+            color: white; padding: 15px; border-radius: 8px; font-family: inherit;
+        }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="brand">WASTD<span>HOURS</span></div>
-        <nav id="main-nav">
-            <button class="active" onclick="filterView('playing')">Jugando</button>
-            <button onclick="filterView('next')">Siguientes</button>
-            <button onclick="filterView('backlog')">Backlog</button>
-            <button onclick="filterView('platinums')">Platinos</button>
-        </nav>
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Buscar nuevos juegos...">
-            <button onclick="executeSearch()">Buscar</button>
+    <nav>
+        <div class="logo">Eternal<span>Backlog</span></div>
+        <div class="nav-links">
+            <button class="active" onclick="changeView('playing', event)">Playing</button>
+            <button onclick="changeView('next', event)">Next Up</button>
+            <button onclick="changeView('backlog', event)">Vault</button>
+            <button onclick="changeView('platinums', event)">Platted</button>
         </div>
-    </header>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Find a game..." onkeypress="if(event.key === 'Enter') startSearch()">
+        </div>
+    </nav>
 
     <main>
-        <h2 id="current-section-title" class="section-title">Jugando Ahora</h2>
-        <div class="grid" id="main-grid">
-            <!-- Juegos inyectados aquí -->
+        <div class="grid" id="game-grid">
+            <!-- Cargando... -->
         </div>
     </main>
 
-    <!-- Modal de Ficha de Juego -->
-    <div class="modal-overlay" id="game-modal" onclick="if(event.target === this) closeModal()">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal()">×</button>
-            <div class="modal-left" id="modal-image"></div>
-            <div class="modal-right">
-                <div>
-                    <h2 id="modal-title">Título del Juego</h2>
-                    <div class="platforms-list" id="modal-platforms"></div>
-                </div>
-                
-                <div class="rawg-desc" id="modal-desc">Cargando sinopsis de RAWG...</div>
-                
-                <!-- Tu información personal -->
-                <div class="user-data-form">
-                    <div class="form-group">
-                        <label>Estado en Biblioteca</label>
-                        <select id="user-status">
-                            <option value="playing">Jugando Ahora</option>
-                            <option value="next">Siguientes (Up Next)</option>
-                            <option value="backlog">Backlog / Wishlist</option>
-                            <option value="platinums">Platinados</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Plataforma Jugada</label>
-                        <select id="user-platform">
-                            <!-- Se llena dinámicamente según RAWG -->
-                        </select>
-                    </div>
-                    <div class="form-group full">
-                        <label>Nota Personal (1-10)</label>
-                        <input type="number" id="user-rating" min="1" max="10" placeholder="Ej: 9">
-                    </div>
-                    <div class="form-group full">
-                        <label>Mi Reseña / Notas</label>
-                        <textarea id="user-review" placeholder="Tus notas, opiniones, o enlaces a guías..."></textarea>
-                    </div>
-                    <button class="save-btn" onclick="saveGameData()">Guardar Cambios</button>
-                </div>
-            </div>
+    <!-- PÁGINA DE DETALLE (Inyectada dinámicamente) -->
+    <div class="game-detail-page" id="game-detail">
+        <button class="close-detail" onclick="closeDetailPage()">BACK TO HUB</button>
+        <div id="detail-data">
+            <!-- Aquí se inyecta todo -->
         </div>
     </div>
 
-    <!-- 1. Llamada al archivo de configuración -->
     <script src="config.js"></script>
-
-    <!-- 2. Tu script principal -->
     <script>
-        // Tu Base de Datos Local (Simulada). La clave es el ID de RAWG.
+        // BASE DE DATOS LOCAL
         let myLibrary = {
-            "28199": { id: "28199", title: "Cat Quest II", status: "playing", image: "https://media.rawg.io/media/games/6b8/6b8c1d51c3a63ec51b81ddc2bfebddde.jpg", rating: "", review: "Jugando en cooperativo.", platformPlayed: "PlayStation 4" },
-            "2454": { id: "2454", title: "Final Fantasy III", status: "playing", image: "https://media.rawg.io/media/games/2a2/2a2e41103f56f1cc3ccb5774eddd5f72.jpg", rating: "", review: "Sacando el bestiario.", platformPlayed: "PC" },
-            "58134": { id: "58134", title: "Bloodborne", status: "platinums", image: "https://media.rawg.io/media/games/214/214b29aeff13a0ae6a70fc4426e85991.jpg", rating: 10, review: "Obra maestra.", platformPlayed: "PlayStation 4" }
+            "28199": { id: "28199", title: "Cat Quest II", status: "playing", rating: 8, notes: "Bestiary in progress", platform: "PS5", missables: true },
+            "58134": { id: "58134", title: "Bloodborne", status: "platinums", rating: 10, notes: "Masterpiece", platform: "PS4", missables: false }
         };
 
         let currentView = 'playing';
-        let currentModalGameId = null; // Guarda el ID del juego que estamos editando
 
-        const statusTitles = { 'playing': 'Jugando Ahora', 'next': 'Siguientes', 'backlog': 'Backlog', 'platinums': 'Platinos' };
-
-        // --- RENDERIZADO DE BIBLIOTECA ---
-        function filterView(status) {
+        // --- FUNCIONES DE NAVEGACIÓN ---
+        function changeView(status, event) {
             currentView = status;
-            
-            // Actualizar UI del Menú
-            document.querySelectorAll('#main-nav button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
+            renderGrid();
+        }
+
+        async function renderGrid() {
+            const grid = document.getElementById('game-grid');
+            grid.innerHTML = '<p>Accessing the vault...</p>';
             
-            document.getElementById('current-section-title').innerText = statusTitles[status];
-            
-            const grid = document.getElementById('main-grid');
+            const games = Object.values(myLibrary).filter(g => g.status === currentView);
             grid.innerHTML = '';
 
-            // Filtrar y renderizar
-            Object.values(myLibrary).forEach(game => {
-                if (game.status === status) {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.onclick = () => openGameModal(game.id, game.title);
-                    card.innerHTML = `
-                        <img src="${game.image}" class="card-img" alt="${game.title}">
-                        <div class="card-info">
-                            <h3><span class="status-dot status-${game.status}"></span>${game.title}</h3>
-                            <span style="font-size:0.8rem; color:#888;">${game.platformPlayed || 'Sin plataforma'} ${game.rating ? '| Nota: ' + game.rating : ''}</span>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                }
-            });
-
-            if(grid.innerHTML === '') grid.innerHTML = '<p style="color:#888;">No hay juegos en esta lista.</p>';
+            for (let game of games) {
+                // Obtenemos imagen real de RAWG si no la tenemos
+                const img = await getGameImage(game.id);
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => openDetailPage(game.id);
+                card.innerHTML = `
+                    <img src="${img}" alt="${game.title}">
+                    <div class="card-overlay">
+                        <h3>${game.title}</h3>
+                        <p>${game.platform || 'Multi'}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
         }
 
-        // --- BUSCADOR API RAWG ---
-        async function executeSearch() {
-            const query = document.getElementById('search-input').value;
-            if (!query) return;
-
-            document.querySelectorAll('#main-nav button').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('current-section-title').innerText = `Resultados para: "${query}"`;
-            
-            const grid = document.getElementById('main-grid');
-            grid.innerHTML = '<p>Buscando en la base de datos de RAWG...</p>';
-
+        async function getGameImage(id) {
             try {
-                const res = await fetch(`https://api.rawg.io/api/games?search=${encodeURIComponent(query)}&key=${config.RAWG_API_KEY}&page_size=12`);
+                const res = await fetch(`https://api.rawg.io/api/games/${id}?key=${config.RAWG_API_KEY}`);
                 const data = await res.json();
-                grid.innerHTML = '';
+                return data.background_image;
+            } catch { return 'https://via.placeholder.com/200x300'; }
+        }
 
-                data.results.forEach(game => {
-                    const isOwned = myLibrary[game.id] !== undefined;
-                    
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    
-                    if(isOwned) {
-                        card.style.border = "2px solid var(--accent)";
-                        card.onclick = (e) => { if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'SELECT') openGameModal(game.id, game.name); };
-                    }
+        // --- PÁGINA DE DETALLE ---
+        async function openDetailPage(gameId) {
+            const detailPage = document.getElementById('game-detail');
+            const container = document.getElementById('detail-data');
+            const localData = myLibrary[gameId];
+            
+            detailPage.style.display = 'block';
+            document.body.style.overflow = 'hidden';
 
-                    card.innerHTML = `
-                        <img src="${game.background_image || 'https://via.placeholder.com/300x400?text=No+Image'}" class="card-img">
-                        <div class="card-info">
-                            <h3>${game.name}</h3>
-                            ${isOwned ? `<p style="color:var(--c-playing); font-size:0.8rem; font-weight:bold;">✓ Ya en biblioteca</p>` : `
-                                <div class="add-controls">
-                                    <select id="quick-status-${game.id}">
-                                        <option value="backlog">Añadir a Backlog</option>
-                                        <option value="next">Añadir a Siguientes</option>
-                                        <option value="playing">Añadir a Jugando</option>
-                                        <option value="platinums">Añadir a Platinos</option>
-                                    </select>
-                                    <button onclick="quickAddGame('${game.id}', '${game.name.replace(/'/g, "\\'")}', '${game.background_image}')">Guardar Juego</button>
-                                </div>
-                            `}
+            // Fetch profundo de RAWG
+            const res = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${config.RAWG_API_KEY}`);
+            const api = await res.json();
+
+            container.innerHTML = `
+                <div class="hero-banner" style="background-image: url('${api.background_image_additional || api.background_image}')"></div>
+                <div class="detail-content">
+                    <div class="detail-header">
+                        <img src="${api.background_image}" class="detail-poster">
+                        <div class="detail-info">
+                            <h1>${api.name}</h1>
+                            <p style="color: var(--accent); font-weight: 800;">${api.released} | Metacritic: ${api.metacritic || 'N/A'}</p>
                         </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            } catch (error) {
-                grid.innerHTML = '<p>Error conectando con RAWG. Verifica que tu API Key esté en config.js y sea válida.</p>';
-            }
+                    </div>
+
+                    <div class="detail-tabs">
+                        <button class="tab-btn active" onclick="switchTab('tab-general', event)">Overview</button>
+                        <button class="tab-btn" onclick="switchTab('tab-trophies', event)">Trophies & Guides</button>
+                        <button class="tab-btn" onclick="switchTab('tab-user', event)">My Journey</button>
+                    </div>
+
+                    <div id="tab-general" class="tab-content active">
+                        <div style="max-width: 800px; line-height: 1.8; color: var(--text-dim);">
+                            ${api.description}
+                        </div>
+                    </div>
+
+                    <div id="tab-trophies" class="tab-content">
+                        <div class="trophy-list">
+                            <div class="trophy-item">
+                                <div class="trophy-icon"></div>
+                                <div>
+                                    <div style="font-weight:bold">Platimum Trophy Hunter</div>
+                                    <div style="font-size:0.8rem; color:var(--text-dim)">Total achievements: ${api.achievements_count || 'Check store'}</div>
+                                </div>
+                            </div>
+                            <div class="trophy-item" style="border-color: #ffa502">
+                                <span class="trophy-warn">Missable Alert</span>
+                                <div>
+                                    <div style="font-weight:bold">¿Trofeos perdibles?</div>
+                                    <div style="font-size:0.8rem; color:var(--text-dim)">${localData.missables ? 'SÍ. Consulta una guía antes de avanzar.' : 'No se han reportado.'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab-user" class="tab-content">
+                        <div class="user-notes-section">
+                            <div>
+                                <label>Status</label><br>
+                                <select id="edit-status" style="width:100%; padding:10px; margin: 10px 0; background:#000; color:white; border:1px solid var(--border)">
+                                    <option value="playing" ${localData.status === 'playing' ? 'selected' : ''}>Playing</option>
+                                    <option value="next" ${localData.status === 'next' ? 'selected' : ''}>Next Up</option>
+                                    <option value="backlog" ${localData.status === 'backlog' ? 'selected' : ''}>Vault</option>
+                                    <option value="platinums" ${localData.status === 'platinums' ? 'selected' : ''}>Platted</option>
+                                </select>
+                                <label>My Rating</label><br>
+                                <input type="number" id="edit-rating" value="${localData.rating}" style="width:100%; padding:10px; margin: 10px 0; background:#000; color:white; border:1px solid var(--border)">
+                            </div>
+                            <div>
+                                <label>Personal Notes & Log</label><br>
+                                <textarea id="edit-notes" rows="6">${localData.notes}</textarea>
+                            </div>
+                            <button onclick="saveChanges('${gameId}')" style="grid-column: span 2; padding: 15px; background: var(--accent); color:white; border:none; border-radius: 8px; font-weight:bold; cursor:pointer;">SAVE UPDATES</button>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
-        // Función rápida para añadir desde la búsqueda
-        function quickAddGame(id, title, image) {
-            const status = document.getElementById(`quick-status-${id}`).value;
-            myLibrary[id] = { id: id, title: title, status: status, image: image, rating: "", review: "", platformPlayed: "" };
-            alert(`${title} añadido a tu biblioteca.`);
-            executeSearch(); // Refresca la vista de búsqueda
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
         }
 
-        // --- MODAL DE EDICIÓN Y DETALLES ---
-        async function openGameModal(gameId, gameTitle) {
-            currentModalGameId = gameId;
-            const gameData = myLibrary[gameId];
+        function closeDetailPage() {
+            document.getElementById('game-detail').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            renderGrid();
+        }
+
+        function saveChanges(gameId) {
+            myLibrary[gameId].status = document.getElementById('edit-status').value;
+            myLibrary[gameId].rating = document.getElementById('edit-rating').value;
+            myLibrary[gameId].notes = document.getElementById('edit-notes').value;
+            alert('Journal updated.');
+        }
+
+        // --- BUSCADOR ---
+        async function startSearch() {
+            const q = document.getElementById('search-input').value;
+            const grid = document.getElementById('game-grid');
+            grid.innerHTML = '<p>Scanning the multiverse...</p>';
             
-            document.getElementById('game-modal').style.display = 'flex';
-            document.getElementById('modal-title').innerText = gameTitle;
-            document.getElementById('modal-image').style.backgroundImage = `url('${gameData.image}')`;
-            document.getElementById('modal-desc').innerHTML = "Buscando detalles...";
-            document.getElementById('modal-platforms').innerHTML = "";
-
-            // Llenar formulario de usuario con los datos locales
-            document.getElementById('user-status').value = gameData.status;
-            document.getElementById('user-rating').value = gameData.rating || '';
-            document.getElementById('user-review').value = gameData.review || '';
-
-            // Obtener info profunda de RAWG
-            try {
-                const res = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${config.RAWG_API_KEY}`);
-                const details = await res.json();
-                
-                document.getElementById('modal-desc').innerHTML = details.description || "Sin descripción oficial.";
-                
-                // Generar lista visual de plataformas y rellenar el selector de usuario
-                const platformSelector = document.getElementById('user-platform');
-                platformSelector.innerHTML = '<option value="">Selecciona tu plataforma...</option>';
-                
-                if (details.platforms) {
-                    details.platforms.forEach(p => {
-                        // Chips visuales
-                        document.getElementById('modal-platforms').innerHTML += `<span>${p.platform.name}</span>`;
-                        // Opciones del selector
-                        const isSelected = gameData.platformPlayed === p.platform.name ? 'selected' : '';
-                        platformSelector.innerHTML += `<option value="${p.platform.name}" ${isSelected}>${p.platform.name}</option>`;
-                    });
-                }
-            } catch (error) {
-                document.getElementById('modal-desc').innerHTML = "No se pudieron cargar los detalles adicionales desde RAWG.";
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('game-modal').style.display = 'none';
-        }
-
-        // Guardar cambios desde el Modal a la Base de Datos Local
-        function saveGameData() {
-            if(!currentModalGameId) return;
-
-            myLibrary[currentModalGameId].status = document.getElementById('user-status').value;
-            myLibrary[currentModalGameId].platformPlayed = document.getElementById('user-platform').value;
-            myLibrary[currentModalGameId].rating = document.getElementById('user-rating').value;
-            myLibrary[currentModalGameId].review = document.getElementById('user-review').value;
-
-            closeModal();
+            const res = await fetch(`https://api.rawg.io/api/games?search=${q}&key=${config.RAWG_API_KEY}&page_size=20`);
+            const data = await res.json();
             
-            // Refrescar la vista actual si no estamos en búsqueda
-            const isSearchView = document.getElementById('current-section-title').innerText.includes('Resultados para');
-            if(!isSearchView) {
-                filterView(currentView); 
-            } else {
-                executeSearch(); // Si editaste desde el buscador, lo refresca
-            }
+            grid.innerHTML = '';
+            data.results.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => {
+                    if(!myLibrary[game.id]) {
+                        myLibrary[game.id] = { id: game.id, title: game.name, status: 'backlog', notes: '', rating: '', platform: game.platforms[0]?.platform.name };
+                    }
+                    openDetailPage(game.id);
+                };
+                card.innerHTML = `
+                    <img src="${game.background_image}" alt="${game.name}">
+                    <div class="card-overlay"><h3>${game.name}</h3><p>Click to add/view</p></div>
+                `;
+                grid.appendChild(card);
+            });
         }
 
-        // Inicializar mostrando la primera pestaña ("Jugando")
-        document.querySelector('#main-nav button').click();
-
+        // Init
+        renderGrid();
     </script>
 </body>
 </html>
