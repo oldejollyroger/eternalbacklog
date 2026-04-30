@@ -3,69 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal Backlog - Game Tracker</title>
+    <title>Wastd Hours - API Connected Hub</title>
     <style>
-        /* Mismos estilos base de antes, con ajustes para imágenes */
-        :root { --bg-color: #121212; --surface-color: #1e1e1e; --primary-color: #bb86fc; --text-color: #e0e0e0; }
-        body { margin: 0; font-family: sans-serif; background: var(--bg-color); color: var(--text-color); }
-        .search-bar { text-align: center; margin: 20px; }
-        .search-bar input { padding: 10px; width: 300px; border-radius: 4px; border: none; }
-        .search-bar button { padding: 10px 20px; background: var(--primary-color); border: none; cursor: pointer; border-radius: 4px; font-weight: bold;}
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .game-card { background: var(--surface-color); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
-        .game-card img { width: 100%; height: 250px; object-fit: cover; }
-        .game-info { padding: 15px; }
-        .game-info h3 { margin: 0 0 10px 0; font-size: 1.2rem; }
-        .meta { font-size: 0.9rem; color: #aaa; margin-bottom: 10px; }
+        :root {
+            --bg-main: #0a0a0c;
+            --bg-panel: #141419;
+            --bg-card: #1c1c24;
+            --text-main: #f0f0f5;
+            --text-muted: #8f8f9d;
+            --accent-plat: #00d26a;
+            --accent-playing: #00a8ff;
+            --accent-next: #fbc531;
+            --accent-backlog: #7f8fa6;
+        }
+
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+        header { padding: 25px 30px; background: #141419; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { margin: 0; font-size: 1.8rem; font-weight: 900; letter-spacing: 2px;}
+        .subtitle { color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+
+        .board { display: flex; flex-grow: 1; padding: 20px 30px; gap: 25px; overflow-x: auto; align-items: flex-start; height: 100%; box-sizing: border-box; }
+
+        .zone { background-color: var(--bg-panel); border-radius: 12px; width: 320px; min-width: 320px; max-height: 100%; display: flex; flex-direction: column; border: 1px solid #222; }
+        .zone-header { padding: 15px 20px; font-weight: 800; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+        
+        #zone-platinums .zone-header { color: var(--accent-plat); }
+        #zone-playing .zone-header { color: var(--accent-playing); }
+        #zone-next .zone-header { color: var(--accent-next); }
+        #zone-backlog .zone-header { color: var(--accent-backlog); }
+
+        .game-count { background: #222; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; color: #fff; }
+        .card-list { padding: 10px; overflow-y: auto; flex-grow: 1; min-height: 100px; }
+
+        /* Tarjetas con Portada RAWG */
+        .card { 
+            background-color: var(--bg-card); border-radius: 10px; margin-bottom: 15px; cursor: grab; 
+            position: relative; overflow: hidden; border: 1px solid #333; display: flex; flex-direction: column;
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-3px); border-color: #555; }
+        .card:active { cursor: grabbing; }
+
+        .card-bg { width: 100%; height: 140px; background-size: cover; background-position: center; background-color: #222; position: relative;}
+        .card-bg::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to top, var(--bg-card), transparent); }
+        
+        .card-content { padding: 15px; z-index: 1; position: relative; margin-top: -30px; }
+        .card h3 { margin: 0 0 5px 0; font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+        
+        .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+        .tag { font-size: 0.7rem; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 4px; }
+        
+        .btn-info { width: 100%; padding: 8px; background: #333; color: white; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; font-weight: bold; }
+        .btn-info:hover { background: var(--accent-playing); }
+
+        /* Modal de Detalles del Juego */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: var(--bg-panel); width: 90%; max-width: 800px; border-radius: 12px; overflow: hidden; border: 1px solid #333; position: relative; max-height: 90vh; overflow-y: auto;}
+        
+        .modal-banner { width: 100%; height: 250px; background-size: cover; background-position: center; position: relative; }
+        .modal-banner::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg-panel), transparent); }
+        .close-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); border: none; color: white; font-size: 1.5rem; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; z-index: 10; }
+        .close-btn:hover { background: var(--accent-brand); }
+        
+        .modal-body { padding: 30px; position: relative; z-index: 2; margin-top: -60px; }
+        .modal-body h2 { margin: 0 0 10px 0; font-size: 2.2rem; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
+        .modal-meta { color: var(--accent-playing); font-weight: bold; margin-bottom: 20px; }
+        .modal-synopsis { line-height: 1.6; color: #ccc; margin-bottom: 25px; font-size: 0.95rem; }
+        
+        .trailer-container { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
+        .trailer-container video { width: 100%; display: block; outline: none; }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="search-bar">
-        <h2>Buscar en RAWG</h2>
-        <input type="text" id="searchInput" placeholder="Ej: Cat Quest 2, Final Fantasy...">
-        <button onclick="searchGames()">Buscar</button>
+    <header>
+        <div>
+            <h1>WASTD HOURS</h1>
+            <div class="subtitle">API Connected Tracker</div>
+        </div>
+    </header>
+
+    <div class="board">
+        <div class="zone" id="zone-platinums">
+            <div class="zone-header"><span>Platinums</span><span class="game-count">0</span></div>
+            <div class="card-list" data-status="platinums"></div>
+        </div>
+        <div class="zone" id="zone-playing">
+            <div class="zone-header"><span>Playing Now</span><span class="game-count">0</span></div>
+            <div class="card-list" data-status="playing"></div>
+        </div>
+        <div class="zone" id="zone-next">
+            <div class="zone-header"><span>Up Next</span><span class="game-count">0</span></div>
+            <div class="card-list" data-status="next"></div>
+        </div>
+        <div class="zone" id="zone-backlog">
+            <div class="zone-header"><span>Backlog Vault</span><span class="game-count">0</span></div>
+            <div class="card-list" data-status="backlog"></div>
+        </div>
     </div>
 
-    <div class="game-grid" id="results-grid">
-        <!-- Los resultados aparecerán aquí -->
+    <!-- Modal para Sinopsis y Tráiler -->
+    <div class="modal-overlay" id="game-modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <div class="modal-banner" id="modal-banner"></div>
+            <div class="modal-body">
+                <h2 id="modal-title">Cargando...</h2>
+                <div class="modal-meta" id="modal-meta">...</div>
+                <div class="modal-synopsis" id="modal-synopsis">Cargando información desde RAWG...</div>
+                <div class="trailer-container" id="trailer-container">
+                    <!-- El video se inyecta aquí -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Sustituye esto por tu API Key real de RAWG
+        // 🛑 ¡IMPORTANTE! PON AQUÍ TU API KEY DE RAWG 🛑
         const RAWG_API_KEY = 'd5859db1311f4748997d944eb3ab9772'; 
 
-        async function searchGames() {
-            const query = document.getElementById('searchInput').value;
-            if (!query) return;
+        // Tu lista de juegos básica
+        const myGames = [
+            { id: "g1", title: "Bloodborne", status: "platinums" },
+            { id: "g2", title: "Elden Ring", status: "platinums" },
+            { id: "g3", title: "Final Fantasy III", status: "playing" },
+            { id: "g4", title: "Cat Quest II", status: "playing" },
+            { id: "g5", title: "Persona 3 Reload", status: "next" },
+            { id: "g6", title: "Resident Evil Village", status: "backlog" }
+        ];
 
-            const grid = document.getElementById('results-grid');
-            grid.innerHTML = '<p style="text-align:center; width:100%;">Buscando...</p>';
+        // 1. Inicializar el tablero y buscar datos básicos (Portadas)
+        async function initializeBoard() {
+            for (const game of myGames) {
+                createSkeletonCard(game);
+                await fetchBasicGameData(game);
+            }
+            setupDragAndDrop();
+            updateCounts();
+        }
 
+        // Crear tarjeta vacía inicial
+        function createSkeletonCard(game) {
+            const list = document.querySelector(`.card-list[data-status="${game.status}"]`);
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.draggable = true;
+            card.id = `card-${game.id}`;
+            card.setAttribute('data-status', game.status);
+            
+            card.innerHTML = `
+                <div class="card-bg" id="bg-${game.id}" style="background-image: url('https://via.placeholder.com/300x150?text=Cargando...')"></div>
+                <div class="card-content">
+                    <h3>${game.title}</h3>
+                    <div class="tags" id="tags-${game.id}"><span class="tag">Buscando...</span></div>
+                    <button class="btn-info" onclick="openGameModal('${game.title}')">Ver Detalles</button>
+                </div>
+            `;
+            list.appendChild(card);
+        }
+
+        // Buscar Imagen y Géneros en RAWG (Búsqueda general)
+        async function fetchBasicGameData(game) {
             try {
-                const response = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${query}&page_size=8`);
-                const data = await response.json();
+                const res = await fetch(`https://api.rawg.io/api/games?search=${encodeURIComponent(game.title)}&key=${RAWG_API_KEY}&page_size=1`);
+                const data = await res.json();
                 
-                grid.innerHTML = '';
-                
-                data.results.forEach(game => {
-                    const releaseYear = game.released ? game.released.split('-')[0] : 'N/A';
-                    grid.innerHTML += `
-                        <div class="game-card">
-                            <img src="${game.background_image || 'https://via.placeholder.com/250x250?text=Sin+Imagen'}" alt="${game.name}">
-                            <div class="game-info">
-                                <h3>${game.name}</h3>
-                                <div class="meta">Lanzamiento: ${releaseYear} <br> Nota: ${game.metacritic || '-'}</div>
-                                <button style="padding: 5px 10px; cursor: pointer;">Añadir a Platinos</button>
-                            </div>
-                        </div>
-                    `;
-                });
+                if(data.results && data.results.length > 0) {
+                    const apiData = data.results[0];
+                    // Actualizar fondo
+                    document.getElementById(`bg-${game.id}`).style.backgroundImage = `url('${apiData.background_image}')`;
+                    // Actualizar etiquetas (géneros)
+                    const genres = apiData.genres.map(g => `<span class="tag">${g.name}</span>`).slice(0, 3).join('');
+                    document.getElementById(`tags-${game.id}`).innerHTML = genres;
+                }
             } catch (error) {
-                console.error("Error al obtener datos:", error);
-                grid.innerHTML = '<p>Error al conectar con RAWG.</p>';
+                console.error("Error al buscar", game.title, error);
             }
         }
+
+        // 2. Carga Profunda para el Modal (Sinopsis y Trailer)
+        async function openGameModal(gameTitle) {
+            const modal = document.getElementById('game-modal');
+            modal.style.display = 'flex';
+            
+            document.getElementById('modal-title').innerText = gameTitle;
+            document.getElementById('modal-synopsis').innerHTML = "Conectando con RAWG para obtener la sinopsis y tráiler...";
+            document.getElementById('trailer-container').innerHTML = "";
+            document.getElementById('modal-banner').style.backgroundImage = "";
+            document.getElementById('modal-meta').innerText = "";
+
+            try {
+                // Paso A: Buscar el ID exacto del juego
+                const searchRes = await fetch(`https://api.rawg.io/api/games?search=${encodeURIComponent(gameTitle)}&key=${RAWG_API_KEY}&page_size=1`);
+                const searchData = await searchRes.json();
+                
+                if(!searchData.results || searchData.results.length === 0) throw new Error("Juego no encontrado");
+                const gameId = searchData.results[0].id;
+
+                // Paso B: Traer todos los detalles (Sinopsis)
+                const detailsRes = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${RAWG_API_KEY}`);
+                const details = await detailsRes.json();
+
+                // Paso C: Traer los videos
+                const moviesRes = await fetch(`https://api.rawg.io/api/games/${gameId}/movies?key=${RAWG_API_KEY}`);
+                const movies = await moviesRes.json();
+
+                // Pintar datos en el modal
+                document.getElementById('modal-banner').style.backgroundImage = `url('${details.background_image_additional || details.background_image}')`;
+                document.getElementById('modal-title').innerText = details.name;
+                document.getElementById('modal-meta').innerText = `Lanzamiento: ${details.released} | Metacritic: ${details.metacritic || 'N/A'} | Desarrollador: ${details.developers?.[0]?.name || 'N/A'}`;
+                document.getElementById('modal-synopsis').innerHTML = details.description || "No hay descripción disponible.";
+
+                // Si hay tráiler, insertarlo
+                if(movies.results && movies.results.length > 0) {
+                    const videoUrl = movies.results[0].data.max;
+                    document.getElementById('trailer-container').innerHTML = `
+                        <video controls autoplay muted>
+                            <source src="${videoUrl}" type="video/mp4">
+                            Tu navegador no soporta el formato de video.
+                        </video>
+                    `;
+                }
+
+            } catch (error) {
+                document.getElementById('modal-synopsis').innerText = "Hubo un error al extraer los datos completos de este juego.";
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('game-modal').style.display = 'none';
+            // Limpiar video para que deje de sonar
+            document.getElementById('trailer-container').innerHTML = ""; 
+        }
+
+        // Cerrar modal pinchando fuera
+        document.getElementById('game-modal').addEventListener('click', function(e) {
+            if(e.target === this) closeModal();
+        });
+
+        // 3. Drag & Drop y Contadores (Igual que antes)
+        let draggedCard = null;
+        function setupDragAndDrop() {
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('dragstart', function() { draggedCard = this; setTimeout(() => this.style.opacity = '0.4', 0); });
+                card.addEventListener('dragend', function() { setTimeout(() => { this.style.opacity = '1'; draggedCard = null; }, 0); });
+            });
+
+            document.querySelectorAll('.card-list').forEach(list => {
+                list.addEventListener('dragover', function(e) { e.preventDefault(); this.parentElement.style.boxShadow = 'inset 0 0 10px rgba(255,255,255,0.1)'; });
+                list.addEventListener('dragleave', function(e) { this.parentElement.style.boxShadow = 'none'; });
+                list.addEventListener('drop', function(e) {
+                    this.parentElement.style.boxShadow = 'none';
+                    if (draggedCard) {
+                        this.appendChild(draggedCard);
+                        draggedCard.setAttribute('data-status', this.getAttribute('data-status'));
+                        updateCounts();
+                    }
+                });
+            });
+        }
+
+        function updateCounts() {
+            document.querySelectorAll('.zone').forEach(zone => {
+                zone.querySelector('.game-count').textContent = zone.querySelector('.card-list').children.length;
+            });
+        }
+
+        // Arrancar
+        initializeBoard();
+
     </script>
 </body>
 </html>
