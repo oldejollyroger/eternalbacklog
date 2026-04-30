@@ -161,10 +161,11 @@
         </div>
     </div>
 
-    <script>
-        // 🛑 TU API KEY DE RAWG 🛑
-        const RAWG_API_KEY = 'd5859db1311f4748997d944eb3ab9772'; 
+    <!-- 1. Llamada al archivo de configuración -->
+    <script src="config.js"></script>
 
+    <!-- 2. Tu script principal -->
+    <script>
         // Tu Base de Datos Local (Simulada). La clave es el ID de RAWG.
         let myLibrary = {
             "28199": { id: "28199", title: "Cat Quest II", status: "playing", image: "https://media.rawg.io/media/games/6b8/6b8c1d51c3a63ec51b81ddc2bfebddde.jpg", rating: "", review: "Jugando en cooperativo.", platformPlayed: "PlayStation 4" },
@@ -222,7 +223,7 @@
             grid.innerHTML = '<p>Buscando en la base de datos de RAWG...</p>';
 
             try {
-                const res = await fetch(`https://api.rawg.io/api/games?search=${encodeURIComponent(query)}&key=${RAWG_API_KEY}&page_size=12`);
+                const res = await fetch(`https://api.rawg.io/api/games?search=${encodeURIComponent(query)}&key=${config.RAWG_API_KEY}&page_size=12`);
                 const data = await res.json();
                 grid.innerHTML = '';
 
@@ -231,7 +232,7 @@
                     
                     const card = document.createElement('div');
                     card.className = 'card';
-                    // Si ya lo tenemos, abrir modal. Si no, no hacemos el card clickeable entero para no interferir con los botones de añadir
+                    
                     if(isOwned) {
                         card.style.border = "2px solid var(--accent)";
                         card.onclick = (e) => { if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'SELECT') openGameModal(game.id, game.name); };
@@ -257,7 +258,7 @@
                     grid.appendChild(card);
                 });
             } catch (error) {
-                grid.innerHTML = '<p>Error conectando con RAWG. ¿Has puesto tu API Key?</p>';
+                grid.innerHTML = '<p>Error conectando con RAWG. Verifica que tu API Key esté en config.js y sea válida.</p>';
             }
         }
 
@@ -287,7 +288,7 @@
 
             // Obtener info profunda de RAWG
             try {
-                const res = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${RAWG_API_KEY}`);
+                const res = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${config.RAWG_API_KEY}`);
                 const details = await res.json();
                 
                 document.getElementById('modal-desc').innerHTML = details.description || "Sin descripción oficial.";
@@ -306,7 +307,7 @@
                     });
                 }
             } catch (error) {
-                document.getElementById('modal-desc').innerHTML = "No se pudieron cargar los detalles adicionales.";
+                document.getElementById('modal-desc').innerHTML = "No se pudieron cargar los detalles adicionales desde RAWG.";
             }
         }
 
@@ -325,17 +326,17 @@
 
             closeModal();
             
-            // Si el usuario estaba viendo la categoría "jugando", forzamos un refresco de esa vista
-            if(document.querySelector(`#main-nav button:contains('${statusTitles[currentView]}')`)) {
-                 filterView(currentView);
+            // Refrescar la vista actual si no estamos en búsqueda
+            const isSearchView = document.getElementById('current-section-title').innerText.includes('Resultados para');
+            if(!isSearchView) {
+                filterView(currentView); 
             } else {
-                 filterView(currentView); // Actualizar vista actual
+                executeSearch(); // Si editaste desde el buscador, lo refresca
             }
         }
 
-        // Helper para emular pseudo-selector :contains (simplificado)
-        // Inicializar
-        document.querySelector('#main-nav button').click(); // Simula click en la primera pestaña
+        // Inicializar mostrando la primera pestaña ("Jugando")
+        document.querySelector('#main-nav button').click();
 
     </script>
 </body>
