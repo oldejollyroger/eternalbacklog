@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal Backlog | Player Hub</title>
+    <title>Eternal Backlog | Pro Trophy Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-body: #050505;
@@ -19,53 +21,50 @@
 
         body {
             margin: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* --- NAVEGACIÓN MODERNA --- */
+        /* --- NAVEGACIÓN --- */
         nav {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 20px 50px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
             position: fixed;
             top: 0; width: 100%; z-index: 1000;
             box-sizing: border-box;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
         }
 
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
+        .logo { font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; cursor: pointer; }
         .logo span { color: var(--accent); }
 
         .nav-links { display: flex; gap: 30px; }
         .nav-links button {
             background: none; border: none; color: var(--text-dim);
-            font-weight: 600; cursor: pointer; transition: 0.3s;
-            font-size: 0.9rem; position: relative;
+            font-weight: 700; cursor: pointer; transition: 0.3s;
+            font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
         }
         .nav-links button.active, .nav-links button:hover { color: var(--text-main); }
-        .nav-links button.active::after {
-            content: ''; position: absolute; bottom: -8px; left: 0; width: 100%; height: 2px; background: var(--accent);
-        }
 
-        .search-box { position: relative; }
         .search-box input {
             background: var(--glass); border: 1px solid var(--border);
-            padding: 10px 20px; border-radius: 30px; color: white; outline: none; width: 200px;
-            transition: 0.3s;
+            padding: 10px 20px; border-radius: 30px; color: white; outline: none; width: 180px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .search-box input:focus { width: 300px; border-color: var(--accent); }
+        .search-box input:focus { width: 280px; border-color: var(--accent); background: rgba(255,255,255,0.08); }
 
-        /* --- GRID DE JUEGOS (NETFLIX STYLE) --- */
-        main { padding: 120px 50px 50px; }
+        /* --- GRID --- */
+        main { padding: 120px 50px 50px; min-height: 100vh; }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 35px;
         }
 
         .card {
@@ -74,243 +73,286 @@
             border-radius: 12px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: 0.4s;
             border: 1px solid var(--border);
+            background: var(--bg-card);
         }
-
-        .card:hover { transform: scale(1.05); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
         .card img { width: 100%; height: 100%; object-fit: cover; }
         .card-overlay {
             position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, transparent 60%);
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 15px;
-            opacity: 0.9;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 5%, transparent 50%);
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 20px;
         }
-        .card-overlay h3 { margin: 0; font-size: 1rem; font-weight: 700; }
-        .card-overlay p { margin: 5px 0 0; font-size: 0.75rem; color: var(--text-dim); }
+        .card-overlay h3 { margin: 0; font-size: 1.1rem; }
 
-        /* --- PÁGINA DE DETALLE (FULL OVERLAY) --- */
+        /* --- DETAIL PAGE --- */
         .game-detail-page {
             position: fixed; inset: 0; background: var(--bg-body); z-index: 2000;
-            display: none; overflow-y: auto;
+            display: none; overflow-y: auto; scroll-behavior: smooth;
         }
-
         .hero-banner {
-            width: 100%; height: 50vh; background-size: cover; background-position: center;
+            width: 100%; height: 60vh; background-size: cover; background-position: center top;
             position: relative;
         }
-
         .hero-banner::after {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to top, var(--bg-body), transparent);
+            background: linear-gradient(to top, var(--bg-body) 0%, rgba(5,5,5,0.4) 100%);
         }
+        .detail-content { padding: 0 80px 80px; margin-top: -200px; position: relative; z-index: 5; }
+        .detail-header { display: flex; gap: 50px; align-items: flex-end; margin-bottom: 50px; }
+        .detail-poster { width: 280px; border-radius: 15px; box-shadow: 0 25px 60px rgba(0,0,0,0.9); border: 1px solid var(--border); }
+        .detail-info h1 { font-size: 4rem; margin: 0; letter-spacing: -3px; line-height: 1; }
 
-        .detail-content { padding: 0 50px 50px; margin-top: -150px; position: relative; z-index: 5; }
-        .detail-header { display: flex; gap: 40px; align-items: flex-end; margin-bottom: 40px; }
-        .detail-poster { width: 250px; border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid var(--border); }
-        
-        .detail-info h1 { font-size: 3.5rem; margin: 0; letter-spacing: -2px; }
-        
-        .detail-tabs { display: flex; gap: 40px; border-bottom: 1px solid var(--border); margin-bottom: 30px; }
+        .detail-tabs { display: flex; gap: 50px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
         .tab-btn {
             background: none; border: none; color: var(--text-dim);
-            padding: 15px 0; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 0.8rem;
+            padding: 20px 0; cursor: pointer; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
         }
         .tab-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
-
-        .tab-content { display: none; }
+        .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
         .tab-content.active { display: block; }
 
-        /* Estilos específicos para la pestaña de trofeos */
-        .trophy-list { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .trophy-item {
-            background: var(--bg-surface); padding: 15px; border-radius: 10px;
-            display: flex; align-items: center; gap: 15px; border: 1px solid var(--border);
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- TROPHY TRACKER --- */
+        .trophy-stats {
+            background: var(--glass); padding: 25px; border-radius: 15px;
+            margin-bottom: 40px; border: 1px solid var(--border);
+            display: flex; align-items: center; gap: 30px;
         }
-        .trophy-icon { width: 40px; height: 40px; border-radius: 50%; background: #222; }
-        .trophy-warn { color: #ffa502; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; border: 1px solid #ffa502; padding: 2px 5px; border-radius: 4px; }
+        .progress-circle-wrap { position: relative; width: 80px; height: 80px; }
+        .progress-bar-bg { width: 100%; height: 10px; background: #222; border-radius: 20px; overflow: hidden; margin-top: 10px; }
+        .progress-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px var(--accent-glow); }
+
+        .trophy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+        .trophy-card {
+            background: var(--bg-surface); border: 1px solid var(--border);
+            padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 20px;
+            transition: 0.3s; cursor: pointer;
+        }
+        .trophy-card:hover { border-color: rgba(255,255,255,0.3); background: #1a1a1a; }
+        .trophy-card.completed { border-color: var(--accent); background: rgba(255, 77, 77, 0.08); }
+        .trophy-card img { width: 55px; height: 55px; border-radius: 8px; filter: grayscale(1); opacity: 0.5; transition: 0.4s; }
+        .trophy-card.completed img { filter: grayscale(0); opacity: 1; }
+        .trophy-info h4 { margin: 0; font-size: 1rem; color: #fff; }
+        .trophy-info p { margin: 5px 0 0; font-size: 0.8rem; color: var(--text-dim); line-height: 1.4; }
+
+        .missable-badge {
+            background: #ff9f43; color: #000; padding: 4px 10px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase;
+        }
 
         .close-detail {
             position: fixed; top: 30px; right: 50px; z-index: 3000;
-            background: var(--accent); color: white; border: none; padding: 10px 20px;
-            border-radius: 30px; font-weight: 800; cursor: pointer;
+            background: var(--accent); color: white; border: none; padding: 12px 25px;
+            border-radius: 40px; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.4);
         }
 
-        .user-notes-section {
-            background: var(--bg-surface); padding: 25px; border-radius: 15px;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        /* --- JOURNAL --- */
+        .journal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .journal-box { background: var(--bg-surface); padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
+        textarea, select, input {
+            width: 100%; background: #000; border: 1px solid var(--border);
+            color: #fff; padding: 15px; border-radius: 10px; margin-top: 10px; font-family: inherit;
         }
-        
-        textarea {
-            width: 100%; background: var(--bg-body); border: 1px solid var(--border);
-            color: white; padding: 15px; border-radius: 8px; font-family: inherit;
+        .save-btn {
+            background: var(--accent); color: white; border: none; width: 100%;
+            padding: 18px; border-radius: 12px; font-weight: 900; cursor: pointer;
+            margin-top: 20px; font-size: 1rem; transition: 0.3s;
         }
+        .save-btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
 
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">Eternal<span>Backlog</span></div>
+        <div class="logo" onclick="location.reload()">Eternal<span>Backlog</span></div>
         <div class="nav-links">
             <button class="active" onclick="changeView('playing', event)">Playing</button>
-            <button onclick="changeView('next', event)">Next Up</button>
+            <button onclick="changeView('next', event)">Next</button>
             <button onclick="changeView('backlog', event)">Vault</button>
             <button onclick="changeView('platinums', event)">Platted</button>
         </div>
         <div class="search-box">
-            <input type="text" id="search-input" placeholder="Find a game..." onkeypress="if(event.key === 'Enter') startSearch()">
+            <input type="text" id="search-input" placeholder="Search a game..." onkeypress="if(event.key === 'Enter') startSearch()">
         </div>
     </nav>
 
     <main>
-        <div class="grid" id="game-grid">
-            <!-- Cargando... -->
-        </div>
+        <div class="grid" id="game-grid"></div>
     </main>
 
-    <!-- PÁGINA DE DETALLE (Inyectada dinámicamente) -->
+    <!-- DETALLE DEL JUEGO -->
     <div class="game-detail-page" id="game-detail">
-        <button class="close-detail" onclick="closeDetailPage()">BACK TO HUB</button>
-        <div id="detail-data">
-            <!-- Aquí se inyecta todo -->
-        </div>
+        <button class="close-detail" onclick="closeDetailPage()">BACK TO VAULT</button>
+        <div id="detail-data"></div>
     </div>
 
     <script src="config.js"></script>
     <script>
-        // BASE DE DATOS LOCAL
+        // Memoria local (En un entorno real, esto se guardaría en localStorage o Base de Datos)
         let myLibrary = {
-            "28199": { id: "28199", title: "Cat Quest II", status: "playing", rating: 8, notes: "Bestiary in progress", platform: "PS5", missables: true },
-            "58134": { id: "58134", title: "Bloodborne", status: "platinums", rating: 10, notes: "Masterpiece", platform: "PS4", missables: false }
+            "28199": { id: "28199", status: "playing", notes: "Focus on missable collectables in Chapter 4.", rating: 8, missables: true, completedTrophies: [] },
+            "58134": { id: "58134", status: "platinums", notes: "Platinum achieved in 80h.", rating: 10, missables: false, completedTrophies: [] }
         };
 
         let currentView = 'playing';
 
-        // --- FUNCIONES DE NAVEGACIÓN ---
-        function changeView(status, event) {
-            currentView = status;
-            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            renderGrid();
-        }
-
+        // 1. RENDERIZAR GRID PRINCIPAL
         async function renderGrid() {
             const grid = document.getElementById('game-grid');
-            grid.innerHTML = '<p>Accessing the vault...</p>';
+            grid.innerHTML = '';
             
             const games = Object.values(myLibrary).filter(g => g.status === currentView);
-            grid.innerHTML = '';
 
             for (let game of games) {
-                // Obtenemos imagen real de RAWG si no la tenemos
-                const img = await getGameImage(game.id);
+                const data = await fetchRAWG(`games/${game.id}`);
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.onclick = () => openDetailPage(game.id);
                 card.innerHTML = `
-                    <img src="${img}" alt="${game.title}">
+                    <img src="${data.background_image}" alt="${data.name}">
                     <div class="card-overlay">
-                        <h3>${game.title}</h3>
-                        <p>${game.platform || 'Multi'}</p>
+                        <h3>${data.name}</h3>
                     </div>
                 `;
                 grid.appendChild(card);
             }
         }
 
-        async function getGameImage(id) {
-            try {
-                const res = await fetch(`https://api.rawg.io/api/games/${id}?key=${config.RAWG_API_KEY}`);
-                const data = await res.json();
-                return data.background_image;
-            } catch { return 'https://via.placeholder.com/200x300'; }
-        }
-
-        // --- PÁGINA DE DETALLE ---
+        // 2. PÁGINA DE DETALLE + TROFEOS
         async function openDetailPage(gameId) {
             const detailPage = document.getElementById('game-detail');
             const container = document.getElementById('detail-data');
-            const localData = myLibrary[gameId];
-            
+            const local = myLibrary[gameId] || { status: 'backlog', notes: '', rating: '', missables: false, completedTrophies: [] };
+
             detailPage.style.display = 'block';
             document.body.style.overflow = 'hidden';
 
-            // Fetch profundo de RAWG
-            const res = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${config.RAWG_API_KEY}`);
-            const api = await res.json();
+            const game = await fetchRAWG(`games/${gameId}`);
+            const achievements = await fetchRAWG(`games/${gameId}/achievements`);
 
             container.innerHTML = `
-                <div class="hero-banner" style="background-image: url('${api.background_image_additional || api.background_image}')"></div>
+                <div class="hero-banner" style="background-image: url('${game.background_image_additional || game.background_image}')"></div>
                 <div class="detail-content">
                     <div class="detail-header">
-                        <img src="${api.background_image}" class="detail-poster">
+                        <img src="${game.background_image}" class="detail-poster">
                         <div class="detail-info">
-                            <h1>${api.name}</h1>
-                            <p style="color: var(--accent); font-weight: 800;">${api.released} | Metacritic: ${api.metacritic || 'N/A'}</p>
+                            <h1>${game.name}</h1>
+                            <p style="color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">
+                                ${game.released.split('-')[0]} | ${game.developers?.[0]?.name || 'N/A'} | Metacritic: ${game.metacritic || '--'}
+                            </p>
                         </div>
                     </div>
 
                     <div class="detail-tabs">
-                        <button class="tab-btn active" onclick="switchTab('tab-general', event)">Overview</button>
-                        <button class="tab-btn" onclick="switchTab('tab-trophies', event)">Trophies & Guides</button>
-                        <button class="tab-btn" onclick="switchTab('tab-user', event)">My Journey</button>
+                        <button class="tab-btn active" onclick="switchTab('tab-ov', event)">Overview</button>
+                        <button class="tab-btn" onclick="switchTab('tab-tr', event)">Trophies & Progress</button>
+                        <button class="tab-btn" onclick="switchTab('tab-jr', event)">Eternal Journal</button>
                     </div>
 
-                    <div id="tab-general" class="tab-content active">
-                        <div style="max-width: 800px; line-height: 1.8; color: var(--text-dim);">
-                            ${api.description}
+                    <!-- TAB: OVERVIEW -->
+                    <div id="tab-ov" class="tab-content active">
+                        <div style="max-width: 900px; font-size: 1.1rem; color: var(--text-dim);">
+                            ${game.description}
                         </div>
                     </div>
 
-                    <div id="tab-trophies" class="tab-content">
-                        <div class="trophy-list">
-                            <div class="trophy-item">
-                                <div class="trophy-icon"></div>
-                                <div>
-                                    <div style="font-weight:bold">Platimum Trophy Hunter</div>
-                                    <div style="font-size:0.8rem; color:var(--text-dim)">Total achievements: ${api.achievements_count || 'Check store'}</div>
+                    <!-- TAB: TROPHIES -->
+                    <div id="tab-tr" class="tab-content">
+                        <div class="trophy-stats">
+                            <div style="flex-grow: 1">
+                                <div style="display:flex; justify-content:space-between">
+                                    <span style="font-weight:900">COLLECTION PROGRESS</span>
+                                    <span id="prog-text" style="color:var(--accent)">0%</span>
                                 </div>
+                                <div class="progress-bar-bg"><div id="prog-fill" class="progress-bar-fill"></div></div>
                             </div>
-                            <div class="trophy-item" style="border-color: #ffa502">
-                                <span class="trophy-warn">Missable Alert</span>
-                                <div>
-                                    <div style="font-weight:bold">¿Trofeos perdibles?</div>
-                                    <div style="font-size:0.8rem; color:var(--text-dim)">${localData.missables ? 'SÍ. Consulta una guía antes de avanzar.' : 'No se han reportado.'}</div>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <span class="missable-badge">Missables Check</span>
+                                <input type="checkbox" id="m-check" ${local.missables ? 'checked' : ''} onchange="myLibrary['${gameId}'].missables = this.checked" style="width:20px; height:20px">
+                            </div>
+                        </div>
+
+                        <div class="trophy-grid">
+                            ${achievements.results.map(a => `
+                                <div class="trophy-card ${local.completedTrophies.includes(a.id) ? 'completed' : ''}" onclick="toggleTrophy(this, '${gameId}', ${a.id})">
+                                    <img src="${a.image}" alt="icon">
+                                    <div class="trophy-info">
+                                        <h4>${a.name}</h4>
+                                        <p>${a.description}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            `).join('')}
                         </div>
                     </div>
 
-                    <div id="tab-user" class="tab-content">
-                        <div class="user-notes-section">
-                            <div>
-                                <label>Status</label><br>
-                                <select id="edit-status" style="width:100%; padding:10px; margin: 10px 0; background:#000; color:white; border:1px solid var(--border)">
-                                    <option value="playing" ${localData.status === 'playing' ? 'selected' : ''}>Playing</option>
-                                    <option value="next" ${localData.status === 'next' ? 'selected' : ''}>Next Up</option>
-                                    <option value="backlog" ${localData.status === 'backlog' ? 'selected' : ''}>Vault</option>
-                                    <option value="platinums" ${localData.status === 'platinums' ? 'selected' : ''}>Platted</option>
+                    <!-- TAB: JOURNAL -->
+                    <div id="tab-jr" class="tab-content">
+                        <div class="journal-grid">
+                            <div class="journal-box">
+                                <label style="font-weight:900; color:var(--text-dim)">Current Status</label>
+                                <select id="j-status">
+                                    <option value="playing" ${local.status === 'playing' ? 'selected' : ''}>Playing Now</option>
+                                    <option value="next" ${local.status === 'next' ? 'selected' : ''}>Next Up</option>
+                                    <option value="backlog" ${local.status === 'backlog' ? 'selected' : ''}>The Vault</option>
+                                    <option value="platinums" ${local.status === 'platinums' ? 'selected' : ''}>Platinums</option>
                                 </select>
-                                <label>My Rating</label><br>
-                                <input type="number" id="edit-rating" value="${localData.rating}" style="width:100%; padding:10px; margin: 10px 0; background:#000; color:white; border:1px solid var(--border)">
+                                <label style="font-weight:900; color:var(--text-dim); margin-top:20px; display:block">Personal Score</label>
+                                <input type="number" id="j-rating" value="${local.rating}" min="1" max="10">
                             </div>
-                            <div>
-                                <label>Personal Notes & Log</label><br>
-                                <textarea id="edit-notes" rows="6">${localData.notes}</textarea>
+                            <div class="journal-box">
+                                <label style="font-weight:900; color:var(--text-dim)">Hunting Notes</label>
+                                <textarea id="j-notes" rows="8" placeholder="Escribe aquí glitcheados, guías recomendadas o tu opinión personal...">${local.notes}</textarea>
                             </div>
-                            <button onclick="saveChanges('${gameId}')" style="grid-column: span 2; padding: 15px; background: var(--accent); color:white; border:none; border-radius: 8px; font-weight:bold; cursor:pointer;">SAVE UPDATES</button>
+                            <button class="save-btn" onclick="saveJournal('${gameId}')">SYNC DATA TO ETERNAL BACKLOG</button>
                         </div>
                     </div>
                 </div>
             `;
+            updateProgressBar();
         }
 
-        function switchTab(tabId, event) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        // --- LÓGICA DE HERRAMIENTAS ---
+        async function fetchRAWG(endpoint) {
+            const res = await fetch(`https://api.rawg.io/api/${endpoint}?key=${config.RAWG_API_KEY}`);
+            return await res.json();
+        }
+
+        function switchTab(id, e) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
+            document.getElementById(id).classList.add('active');
+            e.target.classList.add('active');
+        }
+
+        function toggleTrophy(el, gameId, trophyId) {
+            el.classList.toggle('completed');
+            if(!myLibrary[gameId].completedTrophies) myLibrary[gameId].completedTrophies = [];
+            
+            const index = myLibrary[gameId].completedTrophies.indexOf(trophyId);
+            if(index > -1) myLibrary[gameId].completedTrophies.splice(index, 1);
+            else myLibrary[gameId].completedTrophies.push(trophyId);
+            
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const total = document.querySelectorAll('.trophy-card').length;
+            const done = document.querySelectorAll('.trophy-card.completed').length;
+            const perc = total > 0 ? Math.round((done / total) * 100) : 0;
+            document.getElementById('prog-fill').style.width = perc + '%';
+            document.getElementById('prog-text').innerText = perc + '%';
+        }
+
+        function saveJournal(id) {
+            myLibrary[id].status = document.getElementById('j-status').value;
+            myLibrary[id].rating = document.getElementById('j-rating').value;
+            myLibrary[id].notes = document.getElementById('j-notes').value;
+            alert("Journal Synchronized.");
+            closeDetailPage();
         }
 
         function closeDetailPage() {
@@ -319,41 +361,35 @@
             renderGrid();
         }
 
-        function saveChanges(gameId) {
-            myLibrary[gameId].status = document.getElementById('edit-status').value;
-            myLibrary[gameId].rating = document.getElementById('edit-rating').value;
-            myLibrary[gameId].notes = document.getElementById('edit-notes').value;
-            alert('Journal updated.');
+        function changeView(v, e) {
+            currentView = v;
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            renderGrid();
         }
 
-        // --- BUSCADOR ---
         async function startSearch() {
             const q = document.getElementById('search-input').value;
             const grid = document.getElementById('game-grid');
-            grid.innerHTML = '<p>Scanning the multiverse...</p>';
+            grid.innerHTML = '<p style="text-align:center">Scanning database...</p>';
             
-            const res = await fetch(`https://api.rawg.io/api/games?search=${q}&key=${config.RAWG_API_KEY}&page_size=20`);
-            const data = await res.json();
-            
+            const data = await fetchRAWG(`games?search=${q}&page_size=20`);
             grid.innerHTML = '';
             data.results.forEach(game => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.onclick = () => {
                     if(!myLibrary[game.id]) {
-                        myLibrary[game.id] = { id: game.id, title: game.name, status: 'backlog', notes: '', rating: '', platform: game.platforms[0]?.platform.name };
+                        myLibrary[game.id] = { id: game.id, status: 'backlog', notes: '', rating: '', missables: false, completedTrophies: [] };
                     }
                     openDetailPage(game.id);
                 };
-                card.innerHTML = `
-                    <img src="${game.background_image}" alt="${game.name}">
-                    <div class="card-overlay"><h3>${game.name}</h3><p>Click to add/view</p></div>
-                `;
+                card.innerHTML = `<img src="${game.background_image}"><div class="card-overlay"><h3>${game.name}</h3></div>`;
                 grid.appendChild(card);
             });
         }
 
-        // Init
+        // INIT
         renderGrid();
     </script>
 </body>
